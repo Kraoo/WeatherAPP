@@ -1,23 +1,26 @@
-document.getElementById('submit-btn').addEventListener('click', function() {
+document.getElementById('submit-btn').addEventListener('click', async function() {
     const city = document.getElementById('city-input').value;
-    getWeather(city);
+    await getWeather(city);
 });
 
-document.getElementById('city-input').addEventListener('keydown', function(event) {
+document.getElementById('city-input').addEventListener('keydown', async function(event) {
     if (event.key === 'Enter') {
         const city = document.getElementById('city-input').value;
-        getWeather(city);
+        await getWeather(city);
     }
 });
 
-function getWeather(city) {
+async function getWeather(city) {
     const apiKey = 'd40c1eda2e6976c574f567f43b5a44c4'; 
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
 
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => displayWeather(data))
-        .catch(error => console.error('Error fetching weather:', error));
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        displayWeather(data);
+    } catch (error) {
+        console.error('Error fetching weather:', error);
+    }
 }
 
 function displayWeather(data) {
